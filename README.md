@@ -22,3 +22,11 @@ java -jar brickwall-1.0.0.jar [wall height] [wall width]
 where, </br>
   wall height is the number of layers in the wall</br>
   wall width is the width of the wall.
+
+### Sample 
+Refer the below screenshot to see sample program execution
+![Alt_text](./images/exec_screenshot.png)
+
+In the above image a lego brick wall of height 10 and width 10 is generated. Here a brick is represented by a '|' or '–' and '.' or 'X' (every alternate layer).
+Holes between the wall are represented by a 'H'
+
