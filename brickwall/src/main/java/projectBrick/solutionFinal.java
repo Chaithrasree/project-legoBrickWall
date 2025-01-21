@@ -1,5 +1,3 @@
-// Purpose: This file contains the solution to the problem of building a wall
-// with bricks of different sizes without dynamic programming.
 package projectBrick;
 
 import java.util.ArrayList;
@@ -9,38 +7,33 @@ import java.util.List;
 public class solutionFinal {
 	int wallWidth;
 	private List<List<Integer>> uniqueRows = new ArrayList<>();
-
-	public List<List<Integer>> getUniqueRows() {
-		return uniqueRows;
-	}
-
-	public void setUniqueRows(List<List<Integer>> uniqueRows) {
-		this.uniqueRows = uniqueRows;
-	}
-
 	List<List<Integer>> possibleWall = new ArrayList<>();
 	private List<Integer> currentRow = new ArrayList<>();
 	int[] brickSizes;
-	List<Boolean> hollowList = new ArrayList<>();
+    List<Boolean> hollowList = new ArrayList<>();
 
-	public static void main(String[] args) {
-		solutionFinal solution = new solutionFinal();
-		int height = 10; // Example height
-		int width = 10; // Example width
-		solution.buildWall(height, width);
-		solution.printWall();
-	}
+    public static void main(String[] args) {
+        if (args.length < 2) {
+            System.out.println("Please provide the height and width of the wall as arguments.");
+            return;
+        }
+        int height = Integer.parseInt(args[0]);
+        int width = Integer.parseInt(args[1]);
 
-	public void buildWall(int height, int width) {
+        solutionFinal solution = new solutionFinal();
+        solution.buildLegoWall(height, width);
+        solution.printWall();
+    }
+
+    //Build lego brick wall of given height and width
+    public void buildLegoWall(int height, int width) {
 		this.wallWidth = width;
 		this.brickSizes = new int[] { 1, 2, 3, 4, 6, 8, 10, 12 };
-		// Generate all possible row configurations
-		generateConfigurations(0, false);
+		generateRows(0, false);
 		int numConfigs = uniqueRows.size();
 		List<Integer>[] graph = new List[numConfigs];
 		Arrays.setAll(graph, i -> new ArrayList<>());
 
-		// Build the adjacency list for the configurations graph
 		for (int i = 0; i < numConfigs; i++) {
 			for (int j = 0; j < numConfigs; j++) {
 				if (i != j && canPlaceRows(uniqueRows.get(i), uniqueRows.get(j))) {
@@ -67,8 +60,6 @@ public class solutionFinal {
 			}
 			for (int idx : path) {
 				possibleWall.add(uniqueRows.get(idx));
-				// System.out.println(idx);
-				// System.out.println(possibleWall.get(possibleWall.size()-1));
 			}
 			return true;
 		}
@@ -188,9 +179,9 @@ public class solutionFinal {
 	}
 
 	// Generate all possible row configurations
-	void generateConfigurations(int currentWidth, boolean hasHole) {
+	void generateRows(int currentWidth, boolean hasHole) {
 		if (currentWidth > wallWidth) {
-			return; // Exceeds width of wall, invalid configuration
+			return; 
 		}
 		if (currentWidth == wallWidth) {
 			// Found a valid row configuration
@@ -206,11 +197,11 @@ public class solutionFinal {
 			if (!hasHole && currentWidth > 0 && ((currentWidth + size) < (wallWidth - 1))) {
 				int holeSize = -size;
 				currentRow.add(holeSize);
-				generateConfigurations(currentWidth + size, true);
+				generateRows(currentWidth + size, true);
 				currentRow.remove(currentRow.size() - 1); // Represent hole with same size
 			}
 			currentRow.add(size);
-			generateConfigurations(currentWidth + size, hasHole); // Continue to add bricks
+			generateRows(currentWidth + size, hasHole); // Continue to add bricks
 			currentRow.remove(currentRow.size() - 1); // Backtrack to try other bricks
 		}
 
@@ -230,6 +221,14 @@ public class solutionFinal {
 
 	public void setBrickSizes(int[] brickSizes) {
 		this.brickSizes = brickSizes;
+	}
+
+	public List<List<Integer>> getUniqueRows() {
+		return uniqueRows;
+	}
+
+	public void setUniqueRows(List<List<Integer>> uniqueRows) {
+		this.uniqueRows = uniqueRows;
 	}
 
 }

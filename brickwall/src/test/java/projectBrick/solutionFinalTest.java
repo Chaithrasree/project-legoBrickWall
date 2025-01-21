@@ -13,20 +13,20 @@ public class solutionFinalTest {
 		solutionFinal solution = new solutionFinal();
 		int height = 10;
 		int width = 10;
-		solution.buildWall(height, width);
+		solution.buildLegoWall(height, width);
 		assertNotNull(solution.possibleWall);
 		assertEquals(height, solution.possibleWall.size());
 	}
 
+	// Since printWall prints to console, we can't assert its output directly
+    // This test ensures no exceptions are thrown during execution
 	@Test
 	public void testPrintWall() {
 		solutionFinal solution = new solutionFinal();
 		int height = 10;
 		int width = 10;
-		solution.buildWall(height, width);
+		solution.buildLegoWall(height, width);
 		solution.printWall();
-		// Since printWall prints to console, we can't assert its output directly
-		// This test ensures no exceptions are thrown during execution
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class solutionFinalTest {
 		solutionFinal solution = new solutionFinal();
 		solution.wallWidth = 10;
 		solution.brickSizes = new int[] { 1, 2, 3, 4, 6, 8, 10, 12 };
-		solution.generateConfigurations(0, false);
+		solution.generateRows(0, false);
 		assertFalse(solution.getUniqueRows().isEmpty());
 	}
 }
