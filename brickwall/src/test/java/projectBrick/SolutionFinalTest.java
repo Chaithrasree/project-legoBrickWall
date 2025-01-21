@@ -19,7 +19,7 @@ public class SolutionFinalTest {
 	}
 
 	// Since printWall prints to console, we can't assert its output directly
-    // This test ensures no exceptions are thrown during execution
+	// This test ensures no exceptions are thrown during execution
 	@Test
 	public void testPrintWall() {
 		SolutionFinal solution = new SolutionFinal();

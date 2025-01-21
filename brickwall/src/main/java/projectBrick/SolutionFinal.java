@@ -11,7 +11,6 @@ public class SolutionFinal {
 	private List<List<Integer>> possibleWall = new ArrayList<>();
 	private List<Boolean> hollowList = new ArrayList<>();
 	static int[] brickSizes = new int[] { 1, 2, 3, 4, 6, 8, 10, 12 };
-	
 
 	public List<List<Integer>> getPossibleWall() {
 		return possibleWall;
@@ -218,7 +217,7 @@ public class SolutionFinal {
 			}
 			currentRow.add(size);
 			generateRows(currentWidth + size, hasHole);
-			currentRow.remove(currentRow.size() - 1); 
+			currentRow.remove(currentRow.size() - 1);
 		}
 
 	}
