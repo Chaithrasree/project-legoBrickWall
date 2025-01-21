@@ -24,7 +24,7 @@
           <manifest>
             <addClasspath>true</addClasspath>
             <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>projectBrick.solutionFinal</mainClass>
+            <mainClass>projectBrick.SolutionFinal</mainClass>
           </manifest>
         </archive>
         <outputDirectory>../output/</outputDirectory>
