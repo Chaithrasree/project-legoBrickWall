@@ -24,7 +24,7 @@ where, </br>
   wall width is the width of the wall.
 
 ### Sample 
-Refer the below screenshot to see program execution
+Refer the below screenshot to see sample program execution
 ![Alt_text](./images/exec_screenshot.png)
 
 In the above image a lego brick wall of height 10 and width 10 is generated. Here a brick is represented by a '|' or '–' and '.' or 'X' (every alternate layer).
