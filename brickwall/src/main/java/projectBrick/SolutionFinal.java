@@ -29,16 +29,22 @@ public class SolutionFinal {
 	}
 
 	public static void main(String[] args) {
-		if (args.length < 2) {
-			System.out.println("Please provide the height and width of the wall as arguments.");
-			return;
-		}
-		int height = Integer.parseInt(args[0]);
-		int width = Integer.parseInt(args[1]);
+		try {
+			if (args.length < 2) {
+				System.out.println("Please provide the height and width of the wall as arguments.");
+				return;
+			}
+			int height = Integer.parseInt(args[0]);
+			int width = Integer.parseInt(args[1]);
 
-		SolutionFinal solution = new SolutionFinal();
-		solution.buildLegoWall(height, width);
-		solution.printWall();
+			SolutionFinal solution = new SolutionFinal();
+			solution.buildLegoWall(height, width);
+			solution.printWall();
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid input: Height and width must be integers.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Build lego brick wall of given height and width
@@ -129,95 +135,109 @@ public class SolutionFinal {
 
 	// Checks if two rows can be placed on top of each other
 	boolean canPlaceRows(List<Integer> topRow, List<Integer> bottomRow) {
-		int sumTop = topRow.get(0);
-		int sumBottom = bottomRow.get(0);
-		int i = 1, j = 1;
-		while (i < topRow.size() && j < bottomRow.size()) {
-			if (sumTop == sumBottom) {
-				return false; // Cracks align
-			}
-			if (sumTop < sumBottom) {
-				int topRowValue = topRow.get(i++);
-				if (topRowValue < 0) {
-					topRowValue = -topRowValue;
+		try {
+			int sumTop = topRow.get(0);
+			int sumBottom = bottomRow.get(0);
+			int i = 1, j = 1;
+			while (i < topRow.size() && j < bottomRow.size()) {
+				if (sumTop == sumBottom) {
+					return false; // Cracks align
 				}
-				sumTop += topRowValue;
-			} else {
-				int botttomRowValue = bottomRow.get(j++);
-				if (botttomRowValue < 0) {
-					botttomRowValue = -botttomRowValue;
+				if (sumTop < sumBottom) {
+					int topRowValue = topRow.get(i++);
+					if (topRowValue < 0) {
+						topRowValue = -topRowValue;
+					}
+					sumTop += topRowValue;
+				} else {
+					int botttomRowValue = bottomRow.get(j++);
+					if (botttomRowValue < 0) {
+						botttomRowValue = -botttomRowValue;
+					}
+					sumBottom += botttomRowValue;
 				}
-				sumBottom += botttomRowValue;
 			}
-		}
 
-		for (int k = 0; k < bottomRow.size(); k++) {
-			if (bottomRow.get(k) < 0) { // Hole in the bottom row
-				int holeStart = 0;
-				int holeEnd = 0;
-				int brickStart = 0;
-				int brickEnd = 0;
-				int topRowBrick = 0;
-				int topRowHoleStart = 0;
-				int topRowHoleEnd = 0;
-				for (int m = 0; m < k; m++) {
-					holeStart += bottomRow.get(m);
-				}
-				int holeLength = -bottomRow.get(k);
-				holeEnd = holeStart + holeLength;
-				for (int n = 0; n < topRow.size(); n++) {
-					topRowBrick = topRow.get(n);
-					if (topRowBrick < 0) {
-						topRowBrick = -topRowBrick;
-						topRowHoleStart = brickStart;
-						topRowHoleEnd = topRowHoleStart + topRowBrick;
-						if ((topRowHoleStart >= holeStart && topRowHoleStart <= holeEnd)
-								|| (topRowHoleEnd >= holeStart && topRowHoleEnd <= holeEnd)
-								|| (topRowHoleStart <= holeStart && topRowHoleEnd >= holeEnd)) {
-							return false;
+			for (int k = 0; k < bottomRow.size(); k++) {
+				if (bottomRow.get(k) < 0) { // Hole in the bottom row
+					int holeStart = 0;
+					int holeEnd = 0;
+					int brickStart = 0;
+					int brickEnd = 0;
+					int topRowBrick = 0;
+					int topRowHoleStart = 0;
+					int topRowHoleEnd = 0;
+					for (int m = 0; m < k; m++) {
+						holeStart += bottomRow.get(m);
+					}
+					int holeLength = -bottomRow.get(k);
+					holeEnd = holeStart + holeLength;
+					for (int n = 0; n < topRow.size(); n++) {
+						topRowBrick = topRow.get(n);
+						if (topRowBrick < 0) {
+							topRowBrick = -topRowBrick;
+							topRowHoleStart = brickStart;
+							topRowHoleEnd = topRowHoleStart + topRowBrick;
+							if ((topRowHoleStart >= holeStart && topRowHoleStart <= holeEnd)
+									|| (topRowHoleEnd >= holeStart && topRowHoleEnd <= holeEnd)
+									|| (topRowHoleStart <= holeStart && topRowHoleEnd >= holeEnd)) {
+								return false;
+							}
+						}
+						brickStart += topRowBrick;
+						if (brickStart > holeStart) {
+							brickEnd = brickStart;
+							brickStart -= topRowBrick;
+							if (brickEnd < holeEnd || brickEnd - brickStart < holeLength * 2) {
+								return false;
+							}
+							break;
 						}
 					}
-					brickStart += topRowBrick;
-					if (brickStart > holeStart) {
-						brickEnd = brickStart;
-						brickStart -= topRowBrick;
-						if (brickEnd < holeEnd || brickEnd - brickStart < holeLength * 2) {
-							return false;
-						}
-						break;
-					}
-				}
 
+				}
 			}
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			return false;
 		}
-		return true;
 	}
 
 	// Generate all possible row configurations
 	void generateRows(int currentWidth, boolean hasHole) {
-		if (currentWidth > wallWidth) {
-			return;
-		}
-		if (currentWidth == wallWidth) {
-			// Found a valid row configuration
-			uniqueRows.add(new ArrayList<>(currentRow));
-			if (hasHole) {
-				hollowList.add(true);
-			} else {
-				hollowList.add(false);
+		try {
+			if (currentWidth > wallWidth) {
+				return;
 			}
-			return;
-		}
-		for (int size : brickSizes) {
-			if (!hasHole && currentWidth > 0 && ((currentWidth + size) < (wallWidth - 1))) {
-				int holeSize = -size;
-				currentRow.add(holeSize);
-				generateRows(currentWidth + size, true);
+			if (currentWidth == wallWidth) {
+				// Found a valid row configuration
+				uniqueRows.add(new ArrayList<>(currentRow));
+				if (hasHole) {
+					hollowList.add(true);
+				} else {
+					hollowList.add(false);
+				}
+				return;
+			}
+			for (int size : brickSizes) {
+				if (!hasHole && currentWidth > 0 && ((currentWidth + size) < (wallWidth - 1))) {
+					int holeSize = -size;
+					currentRow.add(holeSize);
+					generateRows(currentWidth + size, true);
+					currentRow.remove(currentRow.size() - 1);
+				}
+				currentRow.add(size);
+				generateRows(currentWidth + size, hasHole);
 				currentRow.remove(currentRow.size() - 1);
 			}
-			currentRow.add(size);
-			generateRows(currentWidth + size, hasHole);
-			currentRow.remove(currentRow.size() - 1);
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
 
 	}
